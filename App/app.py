@@ -73,7 +73,7 @@ class Register(Resource):
         })
 
         retJson = utility.get_response_json(
-            status=200, msg="Sign up Successful")
+            status=200, msg="Sign up Successful", currentTokens=utility.countTokens(username))
         return jsonify(retJson)
 
 
@@ -103,7 +103,7 @@ class Detect(Resource):
 
         if num_tokens <= 0:
             retJson = utility.get_response_json(
-                status=303, msg="You have run out of tokens. Please refill")
+                status=303, msg="You have run out of tokens. Please refill", currentTokens=num_tokens)
             return jsonify(retJson)
 
         nlp = spacy.load("en_core_web_sm")
@@ -114,8 +114,6 @@ class Detect(Resource):
         ratio = text1.similarity(text2)
 
         similarity_score = ratio*100
-        retJson = utility.get_response_json(
-            status=200, msg="Success", similarity=similarity_score)
 
         current_tokens = utility.countTokens(username)
 
@@ -126,6 +124,9 @@ class Detect(Resource):
                 "Tokens": current_tokens - 1
             }
         })
+
+        retJson = utility.get_response_json(
+            status=200, msg="Success", similarity=similarity_score, currentTokens=utility.countTokens(username))
 
         return jsonify(retJson)
 
