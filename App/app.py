@@ -61,7 +61,7 @@ class Register(Resource):
 
         if utility.UserExist(username):
             retJson = utility.get_response_json(
-                status=301, msg="Invalid Username")
+                status=305, msg="Username Already Exists")
             return jsonify(retJson)
 
         hashed_pw = bcrypt.hashpw(password.encode("utf8"), bcrypt.gensalt())
