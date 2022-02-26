@@ -42,11 +42,12 @@ class Utility:
 
         return tokens
 
-    def get_response_json(self, status=501, msg="Internal Error", similarity=None, currentTokens=None):
+    def get_response_json(self, status=501, msg="Internal Error", similarity=None, currentTokens=None, username=None):
         self.response["status"] = status
         self.response["msg"] = msg
-        self.response["similarity"] = similarity
-        self.response["currentTokens"] = currentTokens
+        self.response["userInformation"]["username"] = username
+        self.response["userInformation"]["currentTokens"] = currentTokens
+        self.response["results"]["similarity"] = similarity
 
         return self.response
 
@@ -61,7 +62,7 @@ class Register(Resource):
 
         if utility.UserExist(username):
             retJson = utility.get_response_json(
-                status=305, msg="Username Already Exists")
+                status=305, msg="Username Already Exists", username=username)
             return jsonify(retJson)
 
         hashed_pw = bcrypt.hashpw(password.encode("utf8"), bcrypt.gensalt())
@@ -73,7 +74,7 @@ class Register(Resource):
         })
 
         retJson = utility.get_response_json(
-            status=200, msg="Sign up Successful", currentTokens=utility.countTokens(username))
+            status=200, msg="Sign up Successful", currentTokens=utility.countTokens(username), username=username)
         return jsonify(retJson)
 
 
@@ -89,21 +90,21 @@ class Detect(Resource):
 
         if not utility.UserExist(username):
             retJson = utility.get_response_json(
-                status=301, msg="Invalid Username")
+                status=301, msg="Invalid Username", username=username)
             return jsonify(retJson)
 
         correct_pw = utility.verifyPw(username, password)
 
         if not correct_pw:
             retJson = utility.get_response_json(
-                status=302, msg="Invalid Password")
+                status=302, msg="Invalid Password", username=username)
             return jsonify(retJson)
 
         num_tokens = utility.countTokens(username)
 
         if num_tokens <= 0:
             retJson = utility.get_response_json(
-                status=303, msg="You have run out of tokens. Please refill", currentTokens=num_tokens)
+                status=303, msg="You have run out of tokens. Please refill", currentTokens=num_tokens, username=username)
             return jsonify(retJson)
 
         nlp = spacy.load("en_core_web_sm")
@@ -126,7 +127,7 @@ class Detect(Resource):
         })
 
         retJson = utility.get_response_json(
-            status=200, msg="Success", similarity=similarity_score, currentTokens=utility.countTokens(username))
+            status=200, msg="Success", similarity=similarity_score, currentTokens=utility.countTokens(username), username=username)
 
         return jsonify(retJson)
 
@@ -142,14 +143,14 @@ class Refill(Resource):
 
         if not utility.UserExist(username):
             retJson = utility.get_response_json(
-                status=301, msg="Invalid Username")
+                status=301, msg="Invalid Username", username=username)
             return jsonify(retJson)
 
         correct_pw = utility.verifyPw(username="admin", password=password)
 
         if not correct_pw:
             retJson = utility.get_response_json(
-                status=304, msg="Invalid Admin Password")
+                status=304, msg="Invalid Admin Password", username=username)
             return jsonify(retJson)
 
         current_tokens = utility.countTokens(username)
@@ -165,7 +166,7 @@ class Refill(Resource):
         })
 
         retJson = utility.get_response_json(
-            status=200, msg="Success", currentTokens=updated_tokens)
+            status=200, msg="Success", currentTokens=updated_tokens, username=username)
         return jsonify(retJson)
 
 
