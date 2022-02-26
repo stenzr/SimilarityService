@@ -45,8 +45,10 @@ class Utility:
     def get_response_json(self, status=501, msg="Internal Error", similarity=None, currentTokens=None, username=None):
         self.response["status"] = status
         self.response["msg"] = msg
+        self.response["userInformation"] = {}
         self.response["userInformation"]["username"] = username
         self.response["userInformation"]["currentTokens"] = currentTokens
+        self.response["results"] = {}
         self.response["results"]["similarity"] = similarity
 
         return self.response
