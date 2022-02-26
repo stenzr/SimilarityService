@@ -132,3 +132,51 @@ class Detect(Resource):
         })
 
         return jsonify(retJson)
+
+class Refill(Resource):
+    def post(self):
+        utility = Utility()
+        postedData = request.get_json()
+
+        username = postedData["username"]
+        password = postedData["admin_pw"]
+        refill_amount = postedData["refill"]
+
+        if not utility.UserExist(username):
+            retJson = {
+                "status": 301,
+                "msg": "Invalid Username"
+            }
+
+            return jsonify(retJson)
+
+        correct_pw = utility.verifyPw(username="admin", password=password)
+
+        if not correct_pw:
+            retJson = {
+                "status": 304,
+                "msg": "Invalid Admin Password"
+            }
+
+            return jsonify(retJson)
+
+        current_tokens = utility.countTokens(username)
+
+        updated_tokens = current_tokens + refill_amount
+
+        users.update_one({
+            "Username": username,
+        }, {
+            "$set": {
+                "Tokens": updated_tokens
+            }
+        })
+
+        retJson = {
+            "status": 200,
+            "currentTokens": updated_tokens,
+            "msg": "Success"
+        }        
+
+        return jsonify(retJson)
+
