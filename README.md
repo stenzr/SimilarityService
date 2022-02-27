@@ -2,21 +2,19 @@
 
 A Rest API to detect the similarity between two sentences.
 
-</br>
 
 ----
 
-</br>
 
 ## Authors
 
 - [Rohit Kumar @stenzr](https://github.com/stenzr)
 
-</br></br>
+</br>
 
 ----
 
-</br>
+
 
 ## Tech Stack
 
@@ -29,7 +27,6 @@ A Rest API to detect the similarity between two sentences.
 
 ----
 
-</br>
 
 ## API Reference
 
@@ -46,7 +43,34 @@ A Rest API to detect the similarity between two sentences.
 | `username` | `string` | **Required**. username to register |
 | `password` | `string` | **Required**. password of the user |
 
-</br></br>
+</br>
+
+#### Sample Request
+
+````json
+{
+    "username": "user2",
+    "password": "user_password"
+}
+````
+#### Sample Response
+
+````json
+{
+    "msg": "Sign up Successful",
+    "results": {
+        "similarity": null
+    },
+    "status": 200,
+    "userInformation": {
+        "currentTokens": 6,
+        "username": "user2"
+    }
+}
+
+````
+
+</br>
 
 #### Detect similarity between two texts
 
@@ -61,7 +85,36 @@ A Rest API to detect the similarity between two sentences.
 | `text1`    | `string` | **Required**. Sentence1                 |
 | `textt2`   | `string` | **Required**. Sentence2                 |
 
-</br></br>
+</br>
+
+#### Sample Request
+
+````json
+{
+    "username": "user2",
+    "password": "user_password",
+    "text1" : "you have ",
+    "text2" : "You My Have "
+}
+````
+#### Sample Response
+
+````json
+{
+    "msg": "Success",
+    "results": {
+        "similarity": 53.80624762110769
+    },
+    "status": 200,
+    "userInformation": {
+        "currentTokens": 5,
+        "username": "user2"
+    }
+}
+
+````
+
+</br>
 
 #### Refill the user specific tokens
 
@@ -75,11 +128,39 @@ A Rest API to detect the similarity between two sentences.
 | `admin_pw` | `string`  | **Required**. admin password              |
 | `refill`   | `integer` | **Required**. the number of tokens to add |
 
-<br/></br>
+</br>
+
+#### Sample Request
+
+````json
+{
+    "username": "user2",
+    "admin_pw": "admin_password",
+    "refill" : 10
+}
+````
+#### Sample Response
+
+````json
+{
+    "msg": "Success",
+    "results": {
+        "similarity": null
+    },
+    "status": 200,
+    "userInformation": {
+        "currentTokens": 15,
+        "username": "user2"
+    }
+}
+
+````
+
+</br>
 
 ----
 
-<br/>
+
 
 ## Build Details:
 
