@@ -4,7 +4,7 @@ A Rest API to detect the similarity between two sentences.
 
 </br>
 
----
+----
 
 </br>
 
@@ -14,7 +14,7 @@ A Rest API to detect the similarity between two sentences.
 
 </br></br>
 
----
+----
 
 </br>
 
@@ -27,7 +27,7 @@ A Rest API to detect the similarity between two sentences.
 **ML:** Spacy
 </br></br>
 
----
+----
 
 </br>
 
@@ -75,9 +75,11 @@ A Rest API to detect the similarity between two sentences.
 | `admin_pw` | `string`  | **Required**. admin password              |
 | `refill`   | `integer` | **Required**. the number of tokens to add |
 
-## <br/></br>
+<br/></br>
 
-</br>
+----
+
+<br/>
 
 ## Build Details:
 
