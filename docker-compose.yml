@@ -1,12 +1,37 @@
-version: '3'
+version: '3.8'
 
 services:
-  app:
-    build: './App'
-    ports: 
-      - "5000:5000"
-    links: 
-      - db
-  db:
-    build: './db'
+  frontend:
+    build:
+      context: ./Client
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000" # Expose port 3000 for React
+    depends_on:
+      - backend
+    environment:
+      - REACT_APP_API_URL=http://backend:5000/api  # API URL for the React app to communicate with Flask
 
+  backend:
+    build:
+      context: ./App
+      dockerfile: Dockerfile
+    ports:
+      - "5000:5000" # Expose port 5000 for Flask
+    depends_on:
+      - db
+    environment:
+      - FLASK_ENV=development
+      - MONGO_URI=mongodb://db:27017/mydatabase  # MongoDB URI for Flask to connect to MongoDB
+    volumes:
+      - ./App:/app
+
+  db:
+    image: mongo:6.0  # MongoDB image
+    ports:
+      - "27017:27017" # Expose port 27017 for MongoDB
+    volumes:
+      - mongo-data:/data/db  # Persist MongoDB data
+
+volumes:
+  mongo-data:
