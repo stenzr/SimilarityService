@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import { useAuth } from '../context/AuthContext';
 
 const Register = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [message, setMessage] = useState('');
+  const { login } = useAuth();
 
   const handleRegister = async () => {
     try {
@@ -13,6 +15,9 @@ const Register = () => {
         password,
       });
       setMessage(response.data.msg);
+      if (response.data.status === 200) {
+        login();
+      }
     } catch (error) {
       setMessage('Registration failed');
     }
